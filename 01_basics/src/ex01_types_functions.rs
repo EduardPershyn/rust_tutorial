@@ -3,35 +3,45 @@
 
 /// Celsius → Fahrenheit: F = C * 9/5 + 32.
 pub fn celsius_to_fahrenheit(c: f64) -> f64 {
-    todo!()
+    c * 9.0 / 5.0 + 32.0
 }
 
 /// Average of two integers as a float: average(1, 2) == 1.5.
 /// Must work for huge values too, e.g. average(i32::MAX, i32::MAX).
 pub fn average(a: i32, b: i32) -> f64 {
-    todo!()
+    (a as f64 + b as f64) / 2.0
 }
 
 /// Leap year: divisible by 4, except centuries, except every 400 years.
 /// 2024 → true, 1900 → false, 2000 → true.
 pub fn is_leap_year(year: u32) -> bool {
-    todo!()
+    if year.is_multiple_of(400) {
+        true
+    } else if year.is_multiple_of(100) {
+        false
+    } else {
+        year.is_multiple_of(4)
+    }
 }
 
 /// Add two bytes. If the result doesn't fit into u8, return 255.
 pub fn clamp_add(a: u8, b: u8) -> u8 {
-    todo!()
+    let result  = a.checked_add(b);
+    if result.is_none() {
+        return u8::MAX;
+    }
+    result.unwrap()
 }
 
 /// Last decimal digit, ignoring the sign: last_digit(-123) == 3.
 /// Careful: i64::MIN has no positive i64 counterpart.
 pub fn last_digit(n: i64) -> u8 {
-    todo!()
+    (n.unsigned_abs() % 10) as u8
 }
 
 /// Quotient and remainder in one call: div_rem(17, 5) == (3, 2).
 pub fn div_rem(a: u32, b: u32) -> (u32, u32) {
-    todo!()
+    (a / b, a % b)
 }
 
 #[cfg(test)]

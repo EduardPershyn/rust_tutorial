@@ -4,36 +4,82 @@
 
 /// Sum of all elements.
 pub fn sum(arr: [i32; 5]) -> i32 {
-    todo!()
+    let mut sum = 0;
+    for i in 0..5 {
+        sum += arr[i];
+    }
+    sum
 }
 
 /// (min, max) in a single pass.
 pub fn min_max(arr: [i32; 5]) -> (i32, i32) {
-    todo!()
+    let mut min = arr[0];
+    let mut max = arr[0];
+    for i in 1..5 {
+        if arr[i] < min {
+            min = arr[i];
+        }
+        if arr[i] > max {
+            max = arr[i];
+        }
+    }
+    (min, max)
 }
 
 /// Index of the first occurrence of `target`, or None.
 pub fn find_index(arr: [i32; 5], target: i32) -> Option<usize> {
-    todo!()
+    for i in 0..5 {
+        if arr[i] == target {
+            return Some(i);
+        }
+    }
+    None
 }
 
 /// A new array with elements in reverse order.
 /// Hint: parameters are immutable, but you can write `mut arr: [i32; 5]`.
 pub fn reversed(arr: [i32; 5]) -> [i32; 5] {
-    todo!()
+    let mut reversed = [0; 5];
+    for i in 0..5 {
+        reversed[i] = arr[4 - i];
+    }
+    reversed
 }
 
 /// First pair of indices (i, j) with i < j and arr[i] + arr[j] == target.
 /// "First" = smallest i, then smallest j. None if there is no such pair.
 pub fn two_sum(arr: [i32; 5], target: i32) -> Option<(usize, usize)> {
-    todo!()
+    for i in 0..5 {
+        for j in i+1..5 {
+            if arr[i] + arr[j] == target {
+                return Some((i, j));
+            }
+        }
+    }
+    None
 }
 
 /// Tic-tac-toe: board cells are 'X', 'O' or '.' (empty).
 /// Return Some('X') / Some('O') if that player has 3 in a row
 /// (row, column or diagonal), otherwise None. At most one player wins.
 pub fn winner(board: [[char; 3]; 3]) -> Option<char> {
-    todo!()
+    for i in 0..3 {
+        if board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != '.' {
+            return Some(board[i][0]);
+        }   
+    }
+    for i in 0..3 {
+        if board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != '.' {
+            return Some(board[0][i]);
+        }
+    }
+    if board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '.' {
+        return Some(board[0][0]);
+    }
+    if board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '.' {
+        return Some(board[0][2]);
+    }
+    None
 }
 
 #[cfg(test)]
