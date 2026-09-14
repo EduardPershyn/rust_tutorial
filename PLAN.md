@@ -15,10 +15,10 @@ Style: short theory, lots of runnable code, exercises checked by tests.
 ## Sections
 | #  | Section                          | Key topics                                                              | Status |
 |----|----------------------------------|-------------------------------------------------------------------------|--------|
-| 00 | Intro                            | what Rust is for, strengths/weaknesses, ecosystem, good-to-knows        | ⬜ |
-| 00 | Setup                            | rustup, cargo, Cursor/VS Code + rust-analyzer                           | ⬜ |
-| 01 | Basics                           | variables, types, functions, control flow, arrays/tuples, `match`, tests | ⬜ |
-| 02 | Ownership & Borrowing            | move/copy/clone, `&` / `&mut`, borrow rules, slices, `String` vs `&str` | ⬜ |
+| 00 | Intro                            | what Rust is for, strengths/weaknesses, ecosystem, good-to-knows        | ✅ |
+| 00 | Setup                            | rustup, cargo, Cursor/VS Code + rust-analyzer                           | ✅ |
+| 01 | Basics                           | variables, types, functions, control flow, arrays/tuples, `match`, tests | ✅ |
+| 02 | Ownership & Borrowing            | move/copy/clone, `&` / `&mut`, borrow rules, slices, `String` vs `&str` | 🟡 |
 | 03 | Structs, Enums, Pattern Matching | `struct` + `impl`, enums with data, `match`, `if let`, `Option`         | ⬜ |
 | 04 | Error Handling                   | `panic!` vs `Result`, `?`, custom errors, `thiserror` / `anyhow`        | ⬜ |
 | 05 | Collections & Strings            | `Vec`, `HashMap`, `HashSet`, UTF-8 strings                              | ⬜ |
@@ -41,5 +41,8 @@ Cargo.toml          # workspace: every section is a member crate
 01_basics/
   README.md         # theory
   examples/*.rs     # runnable demos: cargo run --example <name>
-  src/ex*.rs        # exercises + tests: cargo test
+  src/ex*.rs        # implement exercises + tests: cargo test --lib
+  tests/fix*.rs     # make-it-compile exercises (from 02): cargo test --test <name>
 ```
+
+Status: ⬜ not started · 🟡 in progress · ✅ done
