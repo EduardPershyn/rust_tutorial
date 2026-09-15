@@ -5,36 +5,54 @@
 
 /// Take ownership of `list`, append `item`, and give the list back.
 /// Hint: a parameter can be `mut` (`fn f(mut list: Vec<String>, …)`); callers don't see the difference.
-pub fn with_item(list: Vec<String>, item: &str) -> Vec<String> {
-    todo!()
+pub fn with_item(mut list: Vec<String>, item: &str) -> Vec<String> {
+    list.push(item.to_string());
+    list
 }
 
 /// Same effect, but borrowing instead of moving. This is the idiomatic version.
 pub fn add_item(list: &mut Vec<String>, item: &str) {
-    todo!()
+    list.push(item.to_string());
 }
 
 /// Split into words that OWN their text, so they stay valid after `text` is gone.
 pub fn split_owned(text: &str) -> Vec<String> {
-    todo!()
+    let mut result = Vec::new();
+
+    for word in text.split_whitespace() {
+        result.push(word.to_string());
+    }
+    result
 }
 
 /// Consume both lists and return one with all of `a` followed by all of `b`.
 /// Move `b`'s Strings over; don't create new ones.
-pub fn merge(a: Vec<String>, b: Vec<String>) -> Vec<String> {
-    todo!()
+pub fn merge(mut a: Vec<String>, mut b: Vec<String>) -> Vec<String> {
+    a.append(&mut b);
+    a
 }
 
 /// Remove the longest string (in bytes) from the list and give it to the caller.
 /// On a tie take the first one; None for an empty list. Keep the order of the remaining elements.
 /// Hint: `list[i]` can't move a String out, but `list.remove(i)` returns it to you.
 pub fn pop_longest(list: &mut Vec<String>) -> Option<String> {
-    todo!()
+    if list.is_empty() {
+        return None;
+    }
+
+    let mut longest_index = 0;
+    for i in 1..list.len() {
+        if list[i].len() > list[longest_index].len() {
+            longest_index = i;
+        }
+    }
+
+    Some(list.remove(longest_index))
 }
 
 /// Take the String out of `slot`, leaving an empty String behind.
 pub fn take_text(slot: &mut String) -> String {
-    todo!()
+    std::mem::take(slot)
 }
 
 #[cfg(test)]

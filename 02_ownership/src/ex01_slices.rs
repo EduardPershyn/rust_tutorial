@@ -4,29 +4,53 @@
 
 /// Sum of all elements. The same function works for arrays, Vecs and sub-slices.
 pub fn sum(nums: &[i64]) -> i64 {
-    todo!()
+    let mut sum = 0;
+    for number in nums {
+        sum += number;
+    }
+    sum
 }
 
 /// The largest element, or None for an empty slice.
 pub fn largest(nums: &[i32]) -> Option<i32> {
-    todo!()
+    if nums.is_empty() {
+        return None;
+    }
+
+    let mut largest = nums[0];
+    for number in nums {
+        if *number > largest {
+            largest = *number;
+        }
+    }
+    Some(largest)
 }
 
 /// Multiply every element by 2, in place.
 pub fn double_in_place(nums: &mut [i32]) {
-    todo!()
+    for number in nums {
+        *number *= 2;
+    }
 }
 
 /// Replace each element with the sum of itself and all elements before it, in place.
 /// [1, 2, 3, 4] → [1, 3, 6, 10]
 pub fn running_sum(nums: &mut [i64]) {
-    todo!()
+    let length = nums.len();
+    for i in (0..length).rev() {
+        let mut sum = 0;
+        for number in &nums[..i] {
+            sum += number;
+        }
+        nums[i] += sum
+    }
 }
 
 /// Split into two halves. For an odd length, the extra element goes to the second half.
 /// [1, 2, 3, 4, 5] → ([1, 2], [3, 4, 5]). Both results borrow from `nums`; nothing is copied.
 pub fn halves(nums: &[i32]) -> (&[i32], &[i32]) {
-    todo!()
+    let length = nums.len();
+    (&nums[..(length / 2)], &nums[(length / 2)..length])
 }
 
 /// Remove all zeros, keeping the order of the other elements.
@@ -34,7 +58,13 @@ pub fn halves(nums: &[i32]) -> (&[i32], &[i32]) {
 /// Don't use `retain` (it needs a closure, Section 08).
 /// Hint: build a new Vec, then replace the caller's Vec with `*nums = new_vec;`.
 pub fn remove_zeros(nums: &mut Vec<i32>) {
-    todo!()
+    let mut new_vec: Vec<i32> = Vec::new();
+    for number in nums.iter() {
+        if *number != 0 {
+            new_vec.push(*number);
+        }
+    }
+    *nums = new_vec;
 }
 
 #[cfg(test)]

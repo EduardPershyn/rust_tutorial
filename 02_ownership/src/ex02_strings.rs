@@ -4,38 +4,87 @@
 /// The text before the first space, or the whole string if there is no space.
 /// Return a slice of the input, without allocating.
 pub fn first_word(s: &str) -> &str {
-    todo!()
+    match s.find(' ') {
+        Some(i) => &s[..i],
+        None => s,
+    }
 }
 
 /// Number of ASCII vowels (a e i o u), case-insensitive.
 /// Other letters don't count, including accented ones like 'é'.
 pub fn count_vowels(s: &str) -> usize {
-    todo!()
+    let mut count = 0;
+
+    for c in s.chars() {
+        let c = c.to_ascii_lowercase();
+
+        if matches!(c, 'a' | 'e' | 'i' | 'o' | 'u') {
+            count += 1;
+        }
+    }
+
+    count
 }
 
 /// The longest whitespace-separated word. On a tie the first one wins; "" if there are no words.
 /// Measure length in CHARACTERS, not bytes.
 pub fn longest_word(text: &str) -> &str {
-    todo!()
+    let mut longest_word = "";
+    let mut longest_len = 0;
+
+    // for (i, c) in text.char_indices() { 
+    for word in text.split_whitespace() {
+        if word.chars().count() > longest_len {
+            longest_len = word.chars().count();
+            longest_word = word;
+        }
+    }
+    longest_word
 }
 
 /// The words in reverse order, joined by single spaces.
 /// "  hello   big world " → "world big hello"
 pub fn reverse_words(s: &str) -> String {
-    todo!()
+    let mut result = "".to_string();
+    for word in s.split_whitespace().rev() {
+        result += word;
+        result.push(' ');
+    }
+
+    if !result.is_empty() {
+        result.pop();
+    }
+    result
 }
 
 /// Replace every occurrence of `bad` in `text` with '*', one star per CHARACTER of `bad`, in place.
 /// `bad` is never empty.
 pub fn censor(text: &mut String, bad: &str) {
-    todo!()
+    let stars = "*".repeat(bad.chars().count());
+    *text = text.replace(bad, &stars);
 }
 
 /// Palindrome check that ignores case, spaces and punctuation (only alphanumeric chars count).
 /// "A man, a plan, a canal: Panama" → true. Must work for non-ASCII text too.
 /// Hint: `c.is_alphanumeric()`; `c.to_lowercase()` yields chars (loop over it).
 pub fn is_palindrome(s: &str) -> bool {
-    todo!()
+    let mut chars = Vec::new();
+
+    for c in s.chars() {
+        if c.is_alphanumeric() {
+            for lower in c.to_lowercase() {
+                chars.push(lower);
+            }
+        }
+    }
+
+    for i in 0..chars.len() / 2 {
+        if chars[i] != chars[chars.len() - 1 - i] {
+            return false;
+        }
+    }
+
+    true
 }
 
 #[cfg(test)]
