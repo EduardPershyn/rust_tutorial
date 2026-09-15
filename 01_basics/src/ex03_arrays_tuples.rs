@@ -5,8 +5,8 @@
 /// Sum of all elements.
 pub fn sum(arr: [i32; 5]) -> i32 {
     let mut sum = 0;
-    for i in 0..5 {
-        sum += arr[i];
+    for item in &arr {
+        sum += item;
     }
     sum
 }
@@ -15,12 +15,12 @@ pub fn sum(arr: [i32; 5]) -> i32 {
 pub fn min_max(arr: [i32; 5]) -> (i32, i32) {
     let mut min = arr[0];
     let mut max = arr[0];
-    for i in 1..5 {
-        if arr[i] < min {
-            min = arr[i];
+    for item in &arr {
+        if *item < min {
+            min = *item;
         }
-        if arr[i] > max {
-            max = arr[i];
+        if *item > max {
+            max = *item;
         }
     }
     (min, max)
@@ -28,8 +28,8 @@ pub fn min_max(arr: [i32; 5]) -> (i32, i32) {
 
 /// Index of the first occurrence of `target`, or None.
 pub fn find_index(arr: [i32; 5], target: i32) -> Option<usize> {
-    for i in 0..5 {
-        if arr[i] == target {
+    for (i, item) in arr.iter().enumerate() {
+        if *item == target {
             return Some(i);
         }
     }
@@ -40,8 +40,8 @@ pub fn find_index(arr: [i32; 5], target: i32) -> Option<usize> {
 /// Hint: parameters are immutable, but you can write `mut arr: [i32; 5]`.
 pub fn reversed(arr: [i32; 5]) -> [i32; 5] {
     let mut reversed = [0; 5];
-    for i in 0..5 {
-        reversed[i] = arr[4 - i];
+    for (i, item) in arr.iter().rev().enumerate() {
+        reversed[i] = *item;
     }
     reversed
 }
@@ -63,14 +63,14 @@ pub fn two_sum(arr: [i32; 5], target: i32) -> Option<(usize, usize)> {
 /// Return Some('X') / Some('O') if that player has 3 in a row
 /// (row, column or diagonal), otherwise None. At most one player wins.
 pub fn winner(board: [[char; 3]; 3]) -> Option<char> {
-    for i in 0..3 {
-        if board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != '.' {
-            return Some(board[i][0]);
-        }   
+    for row in &board {
+        if row[0] != '.' && row[0] == row[1] && row[1] == row[2] {
+            return Some(row[0]);
+        }
     }
-    for i in 0..3 {
-        if board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != '.' {
-            return Some(board[0][i]);
+    for (i, &top) in board[0].iter().enumerate() {
+        if top != '.' && top == board[1][i] && top == board[2][i] {
+            return Some(top);
         }
     }
     if board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '.' {
@@ -81,6 +81,7 @@ pub fn winner(board: [[char; 3]; 3]) -> Option<char> {
     }
     None
 }
+
 
 #[cfg(test)]
 mod tests {
