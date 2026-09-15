@@ -40,12 +40,15 @@ consume(b);                 // b is gone; the String is dropped when consume() e
 fn make() -> String { String::from("x") }   // returning = move out to the caller (no copy)
 ```
 
-| | C++ | Rust |
-|---|---|---|
-| `b = a` | deep copy | **move** (shallow, `a` is dead) |
-| explicit copy | — | `let b = a.clone();` |
-| explicit move | `std::move(a)` | — (it's the default) |
-| use after move | compiles, object in unspecified state | compile error |
+For a heap-owning string (`std::string` / `String` / `str`):
+
+| | C++ | Java / Python | Rust |
+|---|---|---|---|
+| `b = a` | copy constructor → **deep copy** (new buffer) | **both names point to the same object** (GC tracks it) | **move** (shallow, `a` is dead) |
+| explicit copy | — (it's the default) | `new String(a)` / `copy.copy(a)` | `let b = a.clone();` |
+| explicit move | `std::move(a)` | — | — (it's the default) |
+| explicit shared object | `T&`, `T*`, `shared_ptr<T>` | — (it's the default) | `&T` borrow, or `Rc<T>` / `Arc<T>` (Section 10) |
+| use after move | compiles, object in unspecified state | — | compile error |
 
 **`Copy` types are the exception**: they are copied instead of moved. These are integers, floats, `bool`, `char`, shared references `&T`, and tuples or arrays made only of `Copy` types. Everything in Section 01 was `Copy`, which is why you never hit a move error there.
 
