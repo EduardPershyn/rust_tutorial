@@ -2,7 +2,7 @@
 //! Make it compile by changing ONE thing. Don't change the test.
 //! Run: cargo test --test fix06_str_params
 
-fn shout(s: &String) -> String {
+fn shout(s: &str) -> String {
     s.to_uppercase()
 }
 

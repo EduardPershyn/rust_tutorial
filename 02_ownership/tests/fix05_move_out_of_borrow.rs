@@ -3,11 +3,11 @@
 //! Don't change the test.
 //! Run: cargo test --test fix05_move_out_of_borrow
 
-fn longest_name(names: &[String]) -> String {
-    let mut best = names[0];
+fn longest_name(names: &[String]) -> &str {
+    let mut best = &names[0];
     for name in names {
         if name.len() > best.len() {
-            best = *name;
+            best = name;
         }
     }
     best

@@ -2,9 +2,8 @@
 //! Make it compile. Don't change the test.
 //! Run: cargo test --test fix04_return_local
 
-fn make_greeting(name: &str) -> &str {
-    let greeting = format!("Hello, {name}!");
-    &greeting
+fn make_greeting(name: &str) -> String {
+    format!("Hello, {name}!")
 }
 
 #[test]

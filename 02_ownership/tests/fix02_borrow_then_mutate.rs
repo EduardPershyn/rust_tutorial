@@ -6,9 +6,11 @@
 #[test]
 fn check_then_push() {
     let mut balances = vec![100, 200];
+
     let first = &balances[0];
-    balances.push(300);
     assert_eq!(*first, 100);
+
+    balances.push(300);
     assert_eq!(balances.len(), 3);
 }
 
@@ -16,7 +18,7 @@ fn check_then_push() {
 fn remember_old_price() {
     // Reordering can't help here: the old value is needed AFTER the change.
     let mut prices = [10, 20, 30];
-    let old_first = &prices[0];
+    let old_first = prices[0];
     prices[0] = 99;
     assert_eq!(prices[0] - old_first, 89);
 }

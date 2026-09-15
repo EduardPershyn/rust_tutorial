@@ -14,7 +14,7 @@ fn word_outlives_block() {
     let word;
     {
         let text = String::from("short and sweet");
-        word = first_word(&text);
+        word = first_word(&text).to_string();
     }
     assert_eq!(word, "short");
 }
