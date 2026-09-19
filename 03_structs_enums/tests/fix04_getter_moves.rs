@@ -9,8 +9,8 @@ struct Token {
 }
 
 impl Token {
-    fn symbol(&self) -> String {
-        self.symbol
+    fn symbol(&self) -> &String {
+        &self.symbol
     }
 
     fn decimals(&self) -> u8 {

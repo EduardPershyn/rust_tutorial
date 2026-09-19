@@ -20,7 +20,7 @@ Style: short theory, lots of runnable code, exercises checked by tests.
 | 00 | Setup                            | rustup, cargo, Cursor/VS Code + rust-analyzer                           | ✅ |
 | 01 | Basics                           | variables, types, functions, control flow, arrays/tuples, `match`, tests | ✅ |
 | 02 | Ownership & Borrowing            | move/copy/clone, `&` / `&mut`, borrow rules, slices, `String` vs `&str` | ✅ |
-| 03 | Structs, Enums, Pattern Matching | `struct` + `impl`, enums with data, `match`, `if let`, `Option`         | 🟡 |
+| 03 | Structs, Enums, Pattern Matching | `struct` + `impl`, enums with data, `match`, `if let`, `Option`         | ✅ |
 | 04 | Error Handling                   | `panic!` vs `Result`, `?`, custom errors, `thiserror` / `anyhow`        | ⬜ |
 | 05 | Collections & Strings            | `Vec`, `HashMap`, `HashSet`, UTF-8 strings                              | ⬜ |
 | 06 | Traits & Generics                | traits, generics, bounds, `derive`, std traits, `impl Trait` vs `dyn`   | ⬜ |

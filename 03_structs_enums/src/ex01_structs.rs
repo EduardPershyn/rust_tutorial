@@ -10,33 +10,42 @@ pub struct Account {
 impl Account {
     /// A new account with a zero balance.
     pub fn new(owner: &str) -> Self {
-        todo!()
+        Self { owner: owner.to_string(), balance: 0 }
     }
 
     /// The owner's name, borrowed from the account (no allocation).
     pub fn owner(&self) -> &str {
-        todo!()
+        &self.owner
     }
 
     /// Add funds.
     pub fn deposit(&mut self, amount: u64) {
-        todo!()
+        self.balance += amount
     }
 
     /// Take funds out. If the balance is too low, return false and change nothing.
     pub fn withdraw(&mut self, amount: u64) -> bool {
-        todo!()
+        if self.balance < amount {
+            return false;
+        }
+        self.balance -= amount;
+        true
     }
 
     /// Move `amount` from this account to `other`. If the balance is too low, return false and
     /// change nothing. (Note: `a.transfer_to(&mut a, 1)` doesn't even compile. Why?)
     pub fn transfer_to(&mut self, other: &mut Account, amount: u64) -> bool {
-        todo!()
+        if self.balance < amount {
+            return false;
+        }
+        self.balance -= amount;
+        other.balance += amount;
+        true
     }
 
     /// Close the account: consume it and return what was left on it.
     pub fn close(self) -> u64 {
-        todo!()
+        self.balance
     }
 }
 
@@ -51,14 +60,14 @@ pub struct Wei(pub u128);
 impl Gwei {
     /// Convert to wei. Must not overflow for any u64 value.
     pub fn to_wei(self) -> Wei {
-        todo!()
+        Wei(self.0 as u128 * 1_000_000_000)
     }
 }
 
 /// Transaction fee: gas_used × price, in wei.
 /// Thanks to the newtypes, `gas_cost(21_000, 30)` or `gas_cost(21_000, Wei(30))` don't compile.
 pub fn gas_cost(gas_used: u64, price: Gwei) -> Wei {
-    todo!()
+    Wei(gas_used as u128 * price.to_wei().0)
 }
 
 #[cfg(test)]

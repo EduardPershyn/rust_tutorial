@@ -16,6 +16,7 @@ fn label(p: Payment) -> String {
         Payment::Pending => "pending".to_string(),
         Payment::Settled { amount } => format!("settled {amount}"),
         Payment::Failed => "failed".to_string(),
+        Payment::Refunded { amount } => format!("refunded {amount}"),
     }
 }
 

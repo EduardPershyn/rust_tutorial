@@ -5,44 +5,82 @@
 /// Classify with range patterns ONLY: no `if` guards and no `_` arm.
 /// < 0 → "negative", 0 → "zero", 1..=9 → "digit", 10..=99 → "two digits", ≥ 100 → "large".
 pub fn describe(n: i32) -> &'static str {
-    todo!()
+    match n {
+        ..0 => "negative",
+        0 => "zero",
+        1..=9 => "digit",
+        10..=99 => "two digits",
+        100.. => "large"
+    }
 }
 
 /// (first, last) element; for a single element both are the same; None for an empty slice.
 /// Use slice patterns (`[]`, `[x]`, `[first, .., last]`), not indexing / `.len()` / `.first()`.
 pub fn first_and_last(v: &[i32]) -> Option<(i32, i32)> {
-    todo!()
+    match v {
+        [] => None,
+        [one] => Some((*one, *one)),
+        [first, .., last] => Some((*first, *last)),
+    }
 }
 
 /// Sum of the values that are present. None only if BOTH are None.
 /// Hint: match on the tuple `(a, b)`; an or-pattern can cover two cases in one arm.
 pub fn add_options(a: Option<i32>, b: Option<i32>) -> Option<i32> {
-    todo!()
+    match (a, b) {
+        (Some(x), Some(y)) => Some(x + y),
+        (Some(x), None) | (None, Some(x)) => Some(x),
+        (None, None) => None,
+    }
 }
 
 /// Pop items from the END of the stack, summing the numbers, until a `None` is popped
 /// (that None is removed too) or the stack is empty. Items before the None stay on the stack.
 /// Hint: `while let` with a nested pattern.
 pub fn drain_sum(stack: &mut Vec<Option<i32>>) -> i32 {
-    todo!()
+    let mut sum = 0;
+
+    while let Some(item) = stack.pop() {
+        match item {
+            Some(value) => sum += value,
+            None => break,
+        }
+    }
+
+    sum
 }
 
 /// The price of `item`, or None if it's not in the list.
 pub fn lookup(prices: &[(&str, u32)], item: &str) -> Option<u32> {
-    todo!()
+    for &(name, price) in prices {
+        if name == item {
+            return Some(price);    // found: exit the function right away
+        }
+    }
+    None
 }
 
 /// Total price of all `items`. None if ANY item is missing from `prices`.
 /// Hint: `lookup(...)?` inside the loop.
 pub fn total(prices: &[(&str, u32)], items: &[&str]) -> Option<u32> {
-    todo!()
+    let mut total = 0;
+    for &item in items {
+        total += lookup(prices, item)?;
+    }
+    Some(total)
 }
 
 /// Split "key = value" at the FIRST '=' and trim both sides.
 /// None if there's no '=' or the key is empty. An empty value is fine.
 /// Hint: `split_once` returns an Option; `?` gives you the parts or returns None for you.
 pub fn parse_kv(line: &str) -> Option<(&str, &str)> {
-    todo!()
+    let (key, value) = line.split_once('=')?;   // 1. split at the first '=', or return None
+    let key = key.trim();                        // 2. trim both parts
+    let value = value.trim();
+    if key.is_empty() {                          // 3. reject an empty key
+        return None;
+    }
+    Some((key, value))                           // 4. success
 }
 
 pub struct User {
@@ -52,7 +90,10 @@ pub struct User {
 
 /// The nickname if the user has one, otherwise the name. Borrowed from `user`, no allocation.
 pub fn display_name(user: &User) -> &str {
-    todo!()
+    match &user.nickname {
+        Some(nickname) => nickname,
+        None => &user.name
+    }
 }
 
 #[cfg(test)]

@@ -12,12 +12,20 @@ pub enum Light {
 impl Light {
     /// The cycle is Red → Green → Yellow → Red.
     pub fn next(self) -> Light {
-        todo!()
+        match self {
+            Light::Red => Light::Green,
+            Light::Green => Light::Yellow,
+            Light::Yellow => Light::Red
+        }
     }
 
     /// Red lasts 30 s, Green 25 s, Yellow 5 s.
     pub fn duration_secs(self) -> u32 {
-        todo!()
+        match self {
+            Light::Red => 30,
+            Light::Green => 25,
+            Light::Yellow => 5
+        }
     }
 }
 
@@ -43,33 +51,71 @@ impl Order {
     /// Created → Paid.
     /// Hint: to change the state, assign a new value through the reference: `*self = Order::…;`
     pub fn pay(&mut self, amount: u64) -> bool {
-        todo!()
+        match self {
+            Order::Created => {
+                *self = Order::Paid { amount };
+                true
+            }
+            Order::Paid { .. } | Order::Shipped { .. } | Order::Delivered | Order::Cancelled { .. } => false
+        }
     }
 
     /// Paid → Shipped (keeps the amount).
     pub fn ship(&mut self, tracking: &str) -> bool {
-        todo!()
+        match self {
+            Order::Paid { amount } => {
+                *self = Order::Shipped { amount: *amount, tracking: tracking.to_string() };
+                true
+            }
+            Order::Created | Order::Shipped { .. } | Order::Delivered | Order::Cancelled { .. } => false
+        }
     }
 
     /// Shipped → Delivered.
     pub fn deliver(&mut self) -> bool {
-        todo!()
+        match self {
+            Order::Shipped { .. } => {
+                *self = Order::Delivered;
+                true
+            }
+            Order::Created | Order::Paid { .. } | Order::Delivered | Order::Cancelled { .. } => false
+        }
     }
 
     /// Created → Cancelled { refund: 0 }, Paid → Cancelled { refund: amount }.
     pub fn cancel(&mut self) -> bool {
-        todo!()
+        match self {
+            Order::Created => {
+                *self = Order::Cancelled { refund: 0 };
+                true
+            }
+            Order::Paid { amount } => {
+                *self = Order::Cancelled { refund: *amount };
+                true
+            }
+            Order::Shipped { .. } | Order::Delivered | Order::Cancelled { .. } => false
+        }
     }
 
     /// The tracking number while Shipped, otherwise None. Borrowed, no allocation.
     pub fn tracking(&self) -> Option<&str> {
-        todo!()
+        match self {
+            Order::Shipped { tracking, .. } => Some(tracking),
+            Order::Created | Order::Paid { .. } | Order::Delivered | Order::Cancelled { .. }  => None
+        }
     }
 
     /// Human-readable status:
     /// "created", "paid 100", "shipped via TRK-1", "delivered", "cancelled, refund 100"
     pub fn status(&self) -> String {
-        todo!()
+        match self {
+            Order::Created => "created".to_string(),
+            Order::Paid { amount } => format!("paid {amount}"),
+            Order::Shipped { tracking, .. } => format!("shipped via {tracking}"),
+            Order::Delivered => "delivered".to_string(),
+            Order::Cancelled { refund: 0 } => "cancelled".to_string(),
+            Order::Cancelled { refund } => format!("cancelled, refund {refund}"),
+        }
     }
 }
 

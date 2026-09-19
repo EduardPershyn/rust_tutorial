@@ -12,7 +12,7 @@ impl Counter {
         Counter { count: 0 }
     }
 
-    fn increment(&self) {
+    fn increment(&mut self) {
         self.count += 1;
     }
 
@@ -23,7 +23,7 @@ impl Counter {
 
 #[test]
 fn counts() {
-    let c = Counter::new();
+    let mut c = Counter::new();
     c.increment();
     c.increment();
     assert_eq!(c.get(), 2);

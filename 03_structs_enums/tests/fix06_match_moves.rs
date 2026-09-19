@@ -10,7 +10,7 @@ struct User {
 #[test]
 fn match_then_reuse() {
     let nickname: Option<String> = Some(String::from("neo"));
-    let len = match nickname {
+    let len = match &nickname {
         Some(n) => n.len(),
         None => 0,
     };
@@ -21,7 +21,7 @@ fn match_then_reuse() {
 #[test]
 fn destructure_then_reuse() {
     let user = User { name: String::from("ann"), age: 30 };
-    let User { name, .. } = user;
+    let User { name, .. } = &user;
     assert_eq!(name, "ann");
     assert_eq!(user.age, 30); // this line is fine even now. Why?
     assert_eq!(user.name, "ann");

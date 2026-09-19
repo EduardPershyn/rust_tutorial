@@ -3,6 +3,7 @@
 //! Make it compile by adding ONE line. Don't change the test.
 //! Run: cargo test --test fix05_derive
 
+#[derive(Debug, PartialEq)] 
 struct Point {
     x: i32,
     y: i32,

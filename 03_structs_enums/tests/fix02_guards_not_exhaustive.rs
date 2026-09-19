@@ -5,10 +5,10 @@
 
 fn bucket(n: i32) -> &'static str {
     match n {
-        x if x < 0 => "negative",
+        ..0 => "negative",
         0 => "zero",
-        x if x > 0 && x <= 9 => "digit",
-        x if x >= 10 => "big",
+        1..=9 => "digit",
+        10.. => "big",
     }
 }
 
