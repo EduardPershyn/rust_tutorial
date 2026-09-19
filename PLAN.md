@@ -8,6 +8,7 @@ Style: short theory, lots of runnable code, exercises checked by tests.
 2. Run the examples: `cd NN_name && cargo run --example <file_name>`.
 3. Solve exercises in `NN_name/src/exNN_*.rs`: replace every `todo!()` until `cargo test` is green.
    Don't edit the tests, they are the spec.
+   Std methods you'll need (`split_once`, `trim`, `unwrap_or`, …) are in [STD_CHEATSHEET.md](STD_CHEATSHEET.md).
 4. Run `cargo clippy` and fix its warnings. This is how you learn idiomatic Rust.
 5. Ask Claude to review your solutions. The next section is generated after that,
    adjusted to the mistakes you made.
@@ -37,6 +38,7 @@ Style: short theory, lots of runnable code, exercises checked by tests.
 ```
 Cargo.toml          # workspace: every section is a member crate
 00_intro/README.md  # read first
+STD_CHEATSHEET.md   # std methods used by the exercises, by type
 00_setup/README.md
 01_basics/
   README.md         # theory
