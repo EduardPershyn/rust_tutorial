@@ -22,11 +22,12 @@ A `String` automatically gets every `&str` method, so look for string methods he
 | `contains("el")` | `bool` | |
 | `starts_with("x")`, `ends_with("x")` | `bool` | |
 | `strip_prefix("v")` | `Option<&str>` | `"v1.2".strip_prefix('v')` → `Some("1.2")` |
+| `strip_suffix("%")` | `Option<&str>` | `"42%".strip_suffix('%')` → `Some("42")` |
 | `trim()`, `trim_start()`, `trim_end()` | `&str` (a view, no copy) | `"  hi ".trim()` → `"hi"` |
 | `to_uppercase()`, `to_lowercase()` | new `String` | |
 | `replace("a", "b")` | new `String` | `"a-a".replace("a", "b")` → `"b-b"` |
 | `repeat(3)` | new `String` | `"*".repeat(3)` → `"***"` |
-| `parse::<i32>()` | `Result` (Section 04) | `"42".parse::<i32>()` → `Ok(42)` |
+| `parse::<i32>()` | `Result<i32, ParseIntError>` | `"42".parse::<i32>()` → `Ok(42)`; `"x"` → `Err(…)`. Or let the type drive it: `let n: u32 = s.parse()?;` |
 | `to_string()` / `to_owned()` | new `String` | `&str` → `String` |
 
 ## `String` (owned, growable text): write operations
@@ -93,7 +94,24 @@ Like `String`/`&str`: a `Vec` gets every slice method.
 | `as_ref()` | `&Option<T>` → `Option<&T>` |
 | `as_deref()` | `Option<String>` → `Option<&str>` |
 | `copied()` | `Option<&i32>` → `Option<i32>` |
+| `ok_or(err)` | `Result<T, E>`: `Some(v)` → `Ok(v)`, `None` → `Err(err)` |
 | `opt?` | the value, or return `None` from the current function |
+
+## `Result<T, E>` (Section 04)
+| Method | Returns |
+|---|---|
+| `is_ok()`, `is_err()` | `bool` |
+| `unwrap_or(x)`, `unwrap_or_default()` | `T`, never panics |
+| `ok()` | `Option<T>`: forgets the error |
+| `map_err(MyError::Variant)` | `Result<T, MyError>`: wraps the error in your variant |
+| `r?` | the value, or return `Err(From::from(e))` from the current function |
+| `unwrap()`, `expect("msg")`, `unwrap_err()` | panic on the wrong variant: tests only |
+| `.to_string()` on an error | its `Display` message |
+
+## Formatting into a `Formatter` (for `impl Display`)
+| Macro | Effect |
+|---|---|
+| `write!(f, "need {x}")` | like `format!`, but writes into `f`; returns `fmt::Result` |
 
 ## `std::mem`
 | Function | Effect |

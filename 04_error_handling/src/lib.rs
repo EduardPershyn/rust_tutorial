@@ -1,0 +1,11 @@
+//! Section 04 exercises, Part B.
+//! Replace every `todo!()` so that `cargo test --lib` passes. Don't modify the tests
+//! or the type definitions; only fill in function bodies.
+//! Part A (make it compile / pass) lives in `tests/fix*.rs`.
+
+// Stubs don't use their parameters yet, which triggers warnings. Delete this line once all exercises are done.
+#![allow(unused_variables, dead_code)]
+
+pub mod ex01_results;
+pub mod ex02_bank;
+pub mod ex03_config;
