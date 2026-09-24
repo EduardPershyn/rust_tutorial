@@ -5,10 +5,10 @@
 
 use std::num::ParseIntError;
 
-fn parse_sum(a: &str, b: &str) -> i32 {
+fn parse_sum(a: &str, b: &str) -> Result<i32, ParseIntError> {
     let x: i32 = a.parse()?;
     let y: i32 = b.parse()?;
-    x + y
+    Ok(x + y)
 }
 
 #[test]

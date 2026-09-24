@@ -5,7 +5,9 @@
 //! Run: cargo test --test fix04_unwrap_in_result_fn
 
 fn parse_age(s: &str) -> Result<u32, String> {
-    let age: u32 = s.trim().parse().unwrap();
+    let Ok(age) = s.trim().parse::<u32>() else {
+        return Err(format!("not a number: {s}"));
+    };
     if age > 150 {
         return Err(format!("unrealistic age: {age}"));
     }

@@ -11,29 +11,70 @@ use std::num::ParseIntError;
 ///   the number is above 100    → "out of range: <n>"
 /// Hint: `strip_suffix`, then parse as u32 (so "300%" is out of range, not "not a number").
 pub fn parse_percent(s: &str) -> Result<u8, String> {
-    todo!()
+    let text = s.strip_suffix('%').ok_or("missing %")?;
+
+    // parse() -> Result<u32, ParseIntError>; .ok() -> Option<u32> (drops the library error);
+    // .ok_or(msg) -> Result<u32, String> (attaches our message); ? -> u32 or returns the Err.
+    let n = text.parse::<u32>().ok().ok_or(format!("not a number: {text}"))?;
+
+    // Same thing without building the message on the happy path:
+    // let Ok(n) = text.parse::<u32>() else {
+    //     return Err(format!("not a number: {text}"));
+    // };
+
+    if n > 100 {
+        return Err(format!("out of range: {}", n));
+    }
+
+    Ok(n as u8)
 }
 
 /// Sum of all numbers. Stop at the FIRST invalid item and return its error.
 pub fn sum_all(items: &[&str]) -> Result<i64, ParseIntError> {
-    todo!()
+    let mut sum = 0;
+
+    for item in items {
+        let n: i64 = item.parse()?;
+        sum += n;
+    }
+
+    Ok(sum)
 }
 
 /// Sum of the items that ARE valid numbers, skipping the rest.
 /// Returns (sum, number of skipped items). Here errors are handled, not propagated.
 pub fn sum_valid(items: &[&str]) -> (i64, usize) {
-    todo!()
+    let mut sum: i64 = 0;
+    let mut skipped: usize = 0;
+
+    for item in items {
+        let Ok(n) = item.parse::<i64>() else {
+            skipped += 1;
+            continue;
+        };
+        sum += n;
+    }
+
+    (sum, skipped)
 }
 
 /// Age of the user called `name`. Error text: "unknown user: <name>".
 pub fn user_age(users: &[(&str, u32)], name: &str) -> Result<u32, String> {
-    todo!()
+    for &(user, age) in users {
+        if user == name {
+            return Ok(age);
+        }
+    }
+    Err(format!("unknown user: {name}"))
 }
 
 /// Is the user 18 or older? Errors from `user_age` pass through unchanged.
 /// Hint: reuse `user_age` with `?`; don't repeat the search.
 pub fn is_adult(users: &[(&str, u32)], name: &str) -> Result<bool, String> {
-    todo!()
+    let age = user_age(users, name)?;
+    let adult = age >= 18;
+
+    Ok(adult)
 }
 
 #[cfg(test)]

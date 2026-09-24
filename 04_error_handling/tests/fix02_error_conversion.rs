@@ -12,6 +12,12 @@ enum PortError {
     NotANumber(ParseIntError),
 }
 
+impl From<ParseIntError> for PortError {
+    fn from(e: ParseIntError) -> Self {
+        PortError::NotANumber(e)
+    }
+}
+
 fn port_of(addr: &str) -> Result<u16, PortError> {
     let (_host, port) = addr.split_once(':').ok_or(PortError::NoPort)?;
     let port: u16 = port.parse()?;

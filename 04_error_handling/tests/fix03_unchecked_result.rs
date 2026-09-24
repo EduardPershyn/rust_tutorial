@@ -17,13 +17,13 @@ fn send(balance: &mut u64, amount: u64) -> Result<(), String> {
 #[test]
 fn failed_send_is_noticed() {
     let mut balance = 50;
-    send(&mut balance, 80); // this should fail: assert that it does
+    assert_eq!(send(&mut balance, 80), Err("need 80, have 50".to_string())); // this should fail: assert that it does
     assert_eq!(balance, 50);
 }
 
 #[test]
 fn successful_send_is_checked() {
     let mut balance = 50;
-    send(&mut balance, 20); // this should succeed: assert that too
+    assert_eq!(send(&mut balance, 20), Ok(())); // this should succeed: assert that too
     assert_eq!(balance, 30);
 }

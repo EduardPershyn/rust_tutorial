@@ -20,7 +20,12 @@ impl fmt::Display for BankError {
     ///   SameAccount                                    → "cannot transfer to the same account"
     /// Hint: `match self { … => write!(f, "…") }` (see the README recipe)
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        todo!()
+        match self {
+            BankError::ZeroAmount => write!(f, "amount must be positive"),
+            BankError::AccountNotFound(name)  => write!(f, "account not found: {name}"),
+            BankError::InsufficientFunds{needed, available}  => write!(f, "insufficient funds: need {needed}, have {available}"),
+            BankError::SameAccount => write!(f, "cannot transfer to the same account"),
+        }
     }
 }
 
@@ -38,32 +43,85 @@ pub struct Bank {
 }
 
 impl Bank {
+    fn index_of(&self, name: &str) -> Result<usize, BankError> {
+        for (index, (owner, _)) in self.accounts.iter().enumerate() {
+            if owner == name {
+                return Ok(index);
+            }
+        }
+        Err(BankError::AccountNotFound(name.to_string()))
+    }
+
     /// Open an account with a zero balance. Opening an existing name again changes nothing.
     pub fn open(&mut self, name: &str) {
-        todo!()
+        if self.index_of(name).is_err() {
+            let account = (name.to_string(), 0);
+            self.accounts.push(account);
+        }
     }
 
     /// The current balance.
     pub fn balance(&self, name: &str) -> Result<u64, BankError> {
-        todo!()
+        let index = self.index_of(name)?;
+
+        let (_, balance) = &self.accounts[index];
+        Ok(*balance)
     }
 
     /// Add money. Checks, in this order: ZeroAmount, AccountNotFound.
     pub fn deposit(&mut self, name: &str, amount: u64) -> Result<(), BankError> {
-        todo!()
+        if amount == 0 {
+            return Err(BankError::ZeroAmount);
+        }
+
+        let index = self.index_of(name)?;
+        let (_, balance) = &mut self.accounts[index];
+        *balance += amount;
+
+        Ok(())
     }
 
     /// Take money out and return the NEW balance.
     /// Checks, in this order: ZeroAmount, AccountNotFound, InsufficientFunds.
     pub fn withdraw(&mut self, name: &str, amount: u64) -> Result<u64, BankError> {
-        todo!()
+        if amount == 0 {
+            return Err(BankError::ZeroAmount);
+        }
+
+        let index = self.index_of(name)?;
+        let (_, balance) = &mut self.accounts[index];
+
+        if *balance < amount {
+            return Err(BankError::InsufficientFunds { needed: amount, available: *balance });
+        }
+        *balance -= amount;
+
+        Ok(*balance)
     }
 
     /// Move money between accounts. ATOMIC: on any error, no balance may change.
     /// Checks, in this order: SameAccount, ZeroAmount, `from` not found, `to` not found,
     /// InsufficientFunds.
     pub fn transfer(&mut self, from: &str, to: &str, amount: u64) -> Result<(), BankError> {
-        todo!()
+        if from == to {
+            return Err(BankError::SameAccount);
+        }
+        if amount == 0 {
+            return Err(BankError::ZeroAmount);
+        }
+
+        let from_index = self.index_of(from)?;
+        let to_index = self.index_of(to)?;
+
+        // Only indexes are held across the two mutations: two &mut into one Vec can't coexist.
+        let available = self.accounts[from_index].1;
+        if available < amount {
+            return Err(BankError::InsufficientFunds { needed: amount, available });
+        }
+        self.accounts[from_index].1 -= amount;
+        self.accounts[to_index].1 += amount;
+
+        Ok(())
     }
 }
 

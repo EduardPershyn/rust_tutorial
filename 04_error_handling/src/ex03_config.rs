@@ -20,7 +20,7 @@ pub enum ConfigError {
 /// Lets `?` turn a ParseIntError into ConfigError::BadNumber automatically.
 impl From<ParseIntError> for ConfigError {
     fn from(e: ParseIntError) -> Self {
-        todo!()
+        ConfigError::BadNumber(e)
     }
 }
 
@@ -33,7 +33,10 @@ pub struct Config {
 /// Parse one "key = value" line, trimming the key and the value. The value must be a u32.
 /// Errors: no '=' → MissingEquals(<trimmed line>); bad value → BadNumber (via `?`).
 pub fn parse_line(line: &str) -> Result<(&str, u32), ConfigError> {
-    todo!()
+    let line = line.trim();
+    let (key, value) = line.split_once('=').ok_or(ConfigError::MissingEquals(line.to_string()))?;
+    let value: u32 = value.trim().parse()?;
+    Ok((key.trim(), value))
 }
 
 /// Parse a whole config text, line by line:
@@ -45,7 +48,26 @@ pub fn parse_line(line: &str) -> Result<(&str, u32), ConfigError> {
 ///
 /// Hint: keep `let mut port: Option<u32> = None;`; at the end, turn it into a value with `ok_or(…)?`.
 pub fn parse_config(text: &str) -> Result<Config, ConfigError> {
-    todo!()
+    let mut port: Option<u32> = None;
+    let mut workers: Option<u32> = None;
+
+    for line in text.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+
+        let (key, value) = parse_line(line)?;
+        match key {
+            "port" => port = Some(value),
+            "workers" => workers = Some(value),
+            other => { return Err(ConfigError::UnknownKey(other.to_string())) }
+        }
+    }
+    let port = port.ok_or(ConfigError::MissingKey("port".to_string()))?;
+    let workers = workers.ok_or(ConfigError::MissingKey("workers".to_string()))?;
+
+    Ok(Config { port, workers })
 }
 
 #[cfg(test)]

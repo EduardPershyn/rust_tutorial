@@ -4,7 +4,7 @@
 //! Run: cargo test --test fix06_option_in_result
 
 fn initial(name: &str) -> Result<char, String> {
-    let first = name.chars().next()?;
+    let first = name.chars().next().ok_or("empty name")?;
     Ok(first.to_ascii_uppercase())
 }
 

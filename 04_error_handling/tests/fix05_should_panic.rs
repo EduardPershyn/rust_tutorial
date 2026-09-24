@@ -16,6 +16,7 @@ fn splits() {
 }
 
 #[test]
+#[should_panic(expected = "parts must be non-zero")]
 fn zero_parts_panics() {
     split_evenly(10, 0);
 }
