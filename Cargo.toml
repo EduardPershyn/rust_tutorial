@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["01_basics", "02_ownership", "03_structs_enums", "04_error_handling"]
+members = ["01_basics", "02_ownership", "03_structs_enums", "04_error_handling", "05_collections"]
 
 [workspace.package]
 edition = "2024"

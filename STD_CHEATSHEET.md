@@ -29,6 +29,11 @@ A `String` automatically gets every `&str` method, so look for string methods he
 | `repeat(3)` | new `String` | `"*".repeat(3)` → `"***"` |
 | `parse::<i32>()` | `Result<i32, ParseIntError>` | `"42".parse::<i32>()` → `Ok(42)`; `"x"` → `Err(…)`. Or let the type drive it: `let n: u32 = s.parse()?;` |
 | `to_string()` / `to_owned()` | new `String` | `&str` → `String` |
+| `splitn(2, '=')` | at most n pieces | `"a=b=c".splitn(2, '=')` → `"a"`, `"b=c"` |
+| `rsplit(' ')`, `rfind('/')` | from the right | `"a/b/c".rfind('/')` → `Some(3)` |
+| `replacen('-', "+", 1)` | new `String` | replaces only the first n |
+| `trim_matches('*')` | `&str` | `"**hi**".trim_matches('*')` → `"hi"` |
+| `eq_ignore_ascii_case("x")` | `bool` | ASCII-only case-insensitive compare |
 
 ## `String` (owned, growable text): write operations
 | Method | Effect |
@@ -82,6 +87,46 @@ Like `String`/`&str`: a `Vec` gets every slice method.
 | `swap_remove(i)` → `T` | O(1), but changes the order |
 | `extend(other)`, `append(&mut other)` | add many |
 | `clear()`, `truncate(n)` | |
+
+## `Vec<T>` extras (Section 05)
+| Method | Effect |
+|---|---|
+| `Vec::with_capacity(n)`, `capacity()` | pre-allocate room for n items / how many fit before regrowing |
+| `to_vec()` on a slice | copy a `&[T]` into a new `Vec<T>` |
+| `dedup()` | remove **consecutive** duplicates (sort first) |
+| `sort_by_key(\|x\| …)` | sort by a computed key; `std::cmp::Reverse(k)` flips the order |
+| `sort_by(\|a, b\| a.partial_cmp(b).unwrap())` | needed for floats |
+| `retain(\|x\| …)` | keep only the elements matching the condition |
+| `binary_search(&x)` | `Result<found_index, insert_index>`, on a sorted Vec |
+| `windows(n)` | every overlapping run of n elements |
+| `chunks(n)` | non-overlapping groups of n (the last may be shorter) |
+| `join(", ")` | `[String]` / `[&str]` → `String`; `concat()` flattens `[Vec<T>]` |
+| `.iter().map(…).collect()` | build a new collection (Section 08) |
+
+## `HashMap<K, V>` / `BTreeMap<K, V>` (Section 05)
+`use std::collections::HashMap;`
+
+| Method | Returns / effect |
+|---|---|
+| `HashMap::new()`, `HashMap::from([(k, v), …])` | create |
+| `insert(k, v)` | `Option<V>`: the previous value. **Moves** k and v into the map |
+| `get(&k)`, `get_mut(&k)` | `Option<&V>` / `Option<&mut V>`; a `String` key accepts `get("text")` |
+| `contains_key(&k)`, `remove(&k)` | `bool` / `Option<V>` |
+| `map[&k]` | the value, **panics** if absent |
+| `entry(k).or_insert(0)` | `&mut V`: insert if missing, then give access → `*…or_insert(0) += 1` |
+| `entry(k).or_default()` | the same with the type's default (`0`, `""`, empty `Vec`) |
+| `keys()`, `values()`, `values_mut()`, `iter()` | iterators, in **random** order for `HashMap` |
+| `len()`, `is_empty()`, `retain(\|k, v\| …)` | |
+
+`BTreeMap` has the same API, iterates **sorted by key**, and adds `range(a..b)`. Keys need `Ord` instead of `Hash`.
+
+## `HashSet<T>` / `BTreeSet<T>` (Section 05)
+| Method | Returns |
+|---|---|
+| `insert(x)` | `bool`: **true if it was new** (handy for duplicate detection) |
+| `contains(&x)`, `remove(&x)` | `bool` |
+| `intersection(&b)`, `union(&b)`, `difference(&b)` | iterators (`.collect()` them, then sort for stable output) |
+| `is_subset(&b)`, `is_disjoint(&b)` | `bool` |
 
 ## `Option<T>`
 | Method | Returns |
