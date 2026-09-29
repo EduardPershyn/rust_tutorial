@@ -71,6 +71,14 @@ let doubled: Vec<i32> = v.iter().map(|x| x * 2).collect();
 
 Sorting floats needs `sort_by(|a, b| a.partial_cmp(b).unwrap())`, because `f64` has `NaN` and therefore no total order.
 
+**Descending order with `std::cmp::Reverse`.** `Reverse` is a newtype, `struct Reverse<T>(pub T)`, whose comparison is the opposite of the wrapped value's: `Reverse(5) < Reverse(3)` is true. Wrap a key to flip its order:
+```rust
+use std::cmp::Reverse;
+v.sort_by_key(|x| Reverse(*x));                             // largest first
+pairs.sort_by_key(|(word, n)| (Reverse(*n), word.clone())); // count descending, then word ascending
+```
+Tuple keys compare field by field, so wrapping only one part flips only that part, which `v.sort(); v.reverse()` can't do. (In `sort_by_key` the key can't borrow from the element, hence `word.clone()`; `sort_by(|a, b| …)` avoids the clone by comparing directly.)
+
 ## `HashMap<K, V>`
 ```rust
 use std::collections::HashMap;
