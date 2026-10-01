@@ -78,7 +78,7 @@ Like `String`/`&str`: a `Vec` gets every slice method.
 | `first()`, `last()` | `Option<&T>` |
 | `get(i)` | `Option<&T>`, never panics (`v[i]` panics) |
 | `contains(&x)` | `bool` (takes a reference) |
-| `iter()`, `iter_mut()` | `&T` / `&mut T` items; `.enumerate()` adds indexes, `.rev()` reverses |
+| `iter()`, `iter_mut()`, `into_iter()` | `&T` / `&mut T` / owned `T` items (the last consumes the collection); `.enumerate()` adds indexes, `.rev()` reverses |
 | `swap(i, j)`, `reverse()` | in place |
 | `sort()`, `sort_unstable()` | in place |
 | `split_at(mid)` | `(&[T], &[T])` |

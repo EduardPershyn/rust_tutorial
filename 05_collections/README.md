@@ -42,6 +42,26 @@ let v: Vec<u32> = map.keys().copied().collect();   // collect(): iterator → a 
 ```
 `collect()` needs to know the target type, from the annotation (`let v: Vec<_> = …`) or a turbofish (`collect::<Vec<_>>()`).
 
+### Iterators in one table
+An iterator hands out items one at a time (a `for` loop drives one). Three ways to get one from a collection:
+
+| Call | Items | The collection afterwards | Same as |
+|---|---|---|---|
+| `v.iter()` | `&T`, borrowed | still usable | `for x in &v` |
+| `v.iter_mut()` | `&mut T`, writable | still usable | `for x in &mut v` |
+| `v.into_iter()` | `T`, **moved out** | **consumed** | `for x in v` |
+
+Maps have their own: `map.iter()` gives `(&K, &V)` pairs, plus `keys()`, `values()`, `values_mut()`. Strings have `chars()` and `split_whitespace()`.
+
+What you can chain on an iterator in this section:
+```rust
+.map(|x| x * 2)          // transform each item
+.copied()  .cloned()     // &T → T (Copy types) / &T → T via clone (e.g. &String → String)
+.rev()  .enumerate()     // backwards / with indexes (i, item)
+.collect()               // gather into a Vec, String, HashMap, HashSet…: the type annotation decides
+```
+Iterators are lazy: nothing runs until something consumes them (`for`, `collect`, `sum`…). The rest (`filter`, `fold`, `zip`, writing your own) is Section 08.
+
 ## `Vec<T>`
 ```rust
 let mut v = vec![3, 1, 2];               // or Vec::new(), Vec::with_capacity(100)
