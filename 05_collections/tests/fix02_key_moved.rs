@@ -9,7 +9,7 @@ fn key_still_usable() {
     let mut owners: HashMap<String, u32> = HashMap::new();
     let name = String::from("ann");
 
-    owners.insert(name, 1);
+    owners.insert(name.clone(), 1);
 
     assert_eq!(owners.get(&name), Some(&1));
     assert_eq!(name, "ann");

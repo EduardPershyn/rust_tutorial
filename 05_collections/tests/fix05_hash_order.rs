@@ -7,10 +7,8 @@ use std::collections::HashMap;
 
 /// All names in the map, in alphabetical order.
 fn sorted_names(scores: &HashMap<String, u32>) -> Vec<String> {
-    let mut names = Vec::new();
-    for name in scores.keys() {
-        names.push(name.clone());
-    }
+    let mut names: Vec<String> = scores.keys().cloned().collect();
+    names.sort_unstable();
     names
 }
 

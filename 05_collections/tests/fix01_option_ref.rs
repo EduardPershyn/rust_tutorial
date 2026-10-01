@@ -8,7 +8,7 @@ use std::collections::HashMap;
 fn total_score(scores: &HashMap<String, u32>, names: &[&str]) -> u32 {
     let mut total = 0;
     for name in names {
-        let score: u32 = scores.get(*name);
+        let score: u32 = scores.get(*name).copied().unwrap_or(0);
         total += score;
     }
     total

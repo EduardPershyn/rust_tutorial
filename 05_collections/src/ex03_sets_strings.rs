@@ -6,29 +6,64 @@ use std::collections::HashSet;
 /// Does the slice contain the same value twice?
 /// Hint: `insert` returns false when the value was already there.
 pub fn has_duplicates(values: &[i32]) -> bool {
-    todo!()
+    let mut seen = HashSet::new();
+    for &value in values {
+        if !seen.insert(value) {
+            return true;
+        }
+    }
+    false
 }
 
 /// The set of distinct characters, ignoring whitespace and case (ASCII lowercase).
 pub fn distinct_chars(s: &str) -> HashSet<char> {
-    todo!()
+    let mut chars = HashSet::new();
+    for c in s.chars() {
+        if c.is_ascii_whitespace() {
+            continue;
+        }
+        chars.insert(c.to_ascii_lowercase());
+    }
+    chars
 }
 
 /// Words that appear in BOTH texts (whitespace-separated, case-sensitive), sorted alphabetically.
 pub fn common_words(a: &str, b: &str) -> Vec<String> {
-    todo!()
+    let a_words = a.split_whitespace().collect::<HashSet<&str>>();
+    let b_words = b.split_whitespace().collect::<HashSet<&str>>();
+    let mut common: Vec<String> = a_words.intersection(&b_words).map(|w| w.to_string()).collect();
+    common.sort();
+    common
 }
 
 /// Words of `text` that are not in `stop_words`, in their original order, without duplicates.
 pub fn filter_stop_words(text: &str, stop_words: &HashSet<&str>) -> Vec<String> {
-    todo!()
+    let mut result = Vec::new();
+    let mut seen = HashSet::new();
+    for word in text.split_whitespace() {
+        if !stop_words.contains(word) && seen.insert(word) {
+            result.push(word.to_string());
+        }
+    }
+    result
 }
 
 /// Capitalise the first character of every whitespace-separated word, lowercase the rest,
 /// and join the words with single spaces. "  hELLO   big WORLD " → "Hello Big World"
 /// Works with non-ASCII text too.
 pub fn title_case(text: &str) -> String {
-    todo!()
+    let mut out = String::new();
+    for word in text.split_whitespace() {
+        if !out.is_empty() {
+            out.push(' ');                                // a space between words, not before the first
+        }
+        let mut chars = word.chars();
+        if let Some(first) = chars.next() {
+            out.extend(first.to_uppercase());             // extend: push every char the iterator yields
+            out.push_str(&chars.as_str().to_lowercase());
+        }
+    }
+    out
 }
 
 /// Shorten to at most `max_chars` CHARACTERS. If it doesn't fit, cut it and append "…"
@@ -36,7 +71,15 @@ pub fn title_case(text: &str) -> String {
 /// truncate_chars("hello world", 8) == "hello w…"; shorter text is returned unchanged.
 /// Returns "" when max_chars is 0.
 pub fn truncate_chars(text: &str, max_chars: usize) -> String {
-    todo!()
+    if max_chars == 0 {
+        return String::new();
+    }
+    if text.chars().count() <= max_chars {
+        return text.to_string();                        // fits: unchanged, no "…"
+    }
+    let mut out: String = text.chars().take(max_chars - 1).collect();   // leave room for "…"
+    out.push('…');
+    out
 }
 
 #[cfg(test)]

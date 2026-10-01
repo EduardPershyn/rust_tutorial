@@ -3,42 +3,93 @@
 //! Remember: HashMap iteration order is random, so anything you RETURN must be made deterministic.
 
 use std::collections::HashMap;
+use std::cmp::Reverse;
 
 /// Count how often each whitespace-separated word appears. Words own their text.
 /// Hint: the `entry` API does this in one line per word.
 pub fn word_count(text: &str) -> HashMap<String, usize> {
-    todo!()
+    let mut counts = HashMap::new();
+
+    for word in text.split_whitespace() {
+        *counts.entry(word.to_string()).or_insert(0) += 1;
+    }
+
+    counts
 }
 
 /// The most frequent word and its count. On a tie, the alphabetically smallest word.
 /// None for an empty map.
 pub fn most_common(counts: &HashMap<String, usize>) -> Option<(String, usize)> {
-    todo!()
+    let mut best: Option<(String, usize)> = None;
+    for (word, &count) in counts {
+        let is_better = match &best {                  // ← &best: look, don't take
+            None => true,
+            Some((best_word, best_count)) => {
+                count > *best_count || (count == *best_count && word < best_word)
+            }
+        };
+        if is_better {
+            best = Some((word.clone(), count));        // clone only when there's a new leader
+        }
+    }
+    best
 }
 
 /// Add every count from `extra` into `base` (same word → counts add up).
 /// `extra` is consumed, so move its Strings instead of cloning them.
 pub fn merge_counts(base: &mut HashMap<String, usize>, extra: HashMap<String, usize>) {
-    todo!()
+    // for (word, count) in extra {
+    //     *base.entry(word).or_insert(0) += count; 
+    // }
+
+    for (word, count) in extra {
+        match base.get_mut(&word) {
+            Some(existing) => *existing += count,   // present: add in place
+            None => {
+                base.insert(word, count);           // absent: insert fresh
+            }
+        }
+    }
 }
 
 /// Group the words by their first character. Words keep their order within a group.
 /// Words that are empty are skipped.
 pub fn group_by_first_char(words: &[&str]) -> HashMap<char, Vec<String>> {
-    todo!()
+    let mut groups: HashMap<char, Vec<String>> = HashMap::new();
+    for word in words {
+        let Some(first) = word.chars().next() else {
+            continue;                                   // empty word: skip
+        };
+        groups.entry(first).or_default().push(word.to_string());
+    }
+    groups
 }
 
 /// Net balance per account from a list of (account, amount) movements.
 /// Accounts whose net balance is exactly 0 must NOT appear in the result.
 pub fn net_balances(movements: &[(&str, i64)]) -> HashMap<String, i64> {
-    todo!()
+    let mut result: HashMap<String, i64> = HashMap::new();
+    for (account, amount) in movements {
+        *result.entry(account.to_string()).or_default() += amount;
+    }
+
+    result.retain(|_, balance| *balance != 0);
+    result
 }
 
 /// All (word, count) pairs, ordered by count descending, then by word ascending.
 /// Hint: collect into a Vec first; `sort_by_key` with a tuple key sorts by the first part,
 /// then the second. `std::cmp::Reverse(n)` flips the order of one part.
 pub fn ranking(counts: &HashMap<String, usize>) -> Vec<(String, usize)> {
-    todo!()
+    // 1. copy the map's contents into a Vec: a Vec has an order, a HashMap doesn't
+    let mut pairs: Vec<(String, usize)> = Vec::new();
+    for (word, count) in counts {
+        pairs.push((word.clone(), *count));
+    }
+
+    // 2. sort by a tuple key: first count (descending), then word (ascending)
+    pairs.sort_by_key(|(word, count)| (Reverse(*count), word.clone()));
+    pairs
 }
 
 #[cfg(test)]

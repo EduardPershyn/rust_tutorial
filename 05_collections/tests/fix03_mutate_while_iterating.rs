@@ -8,10 +8,18 @@ use std::collections::HashMap;
 
 /// Double every score above 5.
 fn boost(scores: &mut HashMap<String, u32>) {
+    // 1. modify values in place: no insert, no second borrow
+    // for score in scores.values_mut() {
+    //     if *score > 5 { *score *= 2; }
+    // }
+
+    // 2. decide first, mutate after: the read borrow ends with the first loop
+    let mut to_double = Vec::new();
     for (name, score) in &*scores {
-        if *score > 5 {
-            scores.insert(name.clone(), score * 2);
-        }
+        if *score > 5 { to_double.push(name.clone()); }
+    }
+    for name in to_double {
+        if let Some(score) = scores.get_mut(&name) { *score *= 2; }
     }
 }
 

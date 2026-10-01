@@ -5,10 +5,7 @@
 
 /// The first three characters, or the whole string if it's shorter.
 fn first_three(s: &str) -> String {
-    if s.len() <= 3 {
-        return s.to_string();
-    }
-    s[..3].to_string()
+    s.chars().take(3).collect()
 }
 
 #[test]

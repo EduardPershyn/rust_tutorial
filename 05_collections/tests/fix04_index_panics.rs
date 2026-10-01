@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 /// The price of `item`, or 0 if we don't sell it.
 fn price_of(prices: &HashMap<&str, u32>, item: &str) -> u32 {
-    prices[item]
+    prices.get(item).copied().unwrap_or(0)
 }
 
 #[test]
